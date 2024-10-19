@@ -23,7 +23,8 @@ jobs:
         
       # Configure JFrog for npm repositories
       - name: Set CLI Config
-        run: jf npm-config --global=true --repo-resolve=mydemo --repo-deploy=mydemo
+        run: jf npm-config --global=true --repo-resolve=knrepo-virtual --repo-deploy=knrepo-virtual
+        # Repo name changed to knrepo-virtual here
         
       # Install project dependencies using npm and JFrog CLI
       - name: Install Deps
@@ -46,7 +47,8 @@ jobs:
       - name: Push Artifacts to JFrog
         run: |
           # Upload the .tgz file with timestamp to JFrog Artifactory
-          jf rt u "build_${{ env.TIMESTAMP }}.tgz" "mydemo/path/to/artifacts/build_${{ env.TIMESTAMP }}.tgz"
+          jf rt u "build_${{ env.TIMESTAMP }}.tgz" "knrepo-virtual/path/to/artifacts/build_${{ env.TIMESTAMP }}.tgz"
+          # Repo name changed to knrepo-virtual here
         
       # Publish the npm package to JFrog Artifactory
       - name: Publish
@@ -61,4 +63,3 @@ jobs:
           jf rt build-add-git
           # Publish build info
           jf rt build-publish
-          
