@@ -1,7 +1,6 @@
+
 name: "JFrog Integration Example"
-on: 
-  push:
-  workflow_dispatch: # Allows manual trigger
+on: push
 
 jobs:
   build:
@@ -26,6 +25,7 @@ jobs:
       # Configure JFrog for npm repositories
       - name: Set CLI Config
         run: jf npm-config --global=true --repo-resolve=knrepo-virtual --repo-deploy=knrepo-virtual
+        # Repo name changed to knrepo-virtual here
         
       # Install project dependencies using npm and JFrog CLI
       - name: Install Deps
@@ -47,7 +47,9 @@ jobs:
       # Push the compressed .tgz file to JFrog Artifactory
       - name: Push Artifacts to JFrog
         run: |
+          # Upload the .tgz file with timestamp to JFrog Artifactory
           jf rt u "build_${{ env.TIMESTAMP }}.tgz" "knrepo-virtual/gha-artifacts/build_${{ env.TIMESTAMP }}.tgz"
+          # Repo name changed to knrepo-virtual here  # gha-artifacts added the path for the artifacts
         
       # Publish the npm package to JFrog Artifactory
       - name: Publish
@@ -56,6 +58,9 @@ jobs:
       # Publish build information to JFrog
       - name: Publish Build info With JFrog CLI
         run: |
+          # Collect environment variables for the build
           jf rt build-collect-env
+          # Collect VCS details from git and add them to the build
           jf rt build-add-git
-          jf rt build-publish  
+          # Publish build info
+          jf rt build-publish
